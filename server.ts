@@ -29,10 +29,8 @@ async function takeScreenshot(page: Page, sessionId: string, prefix: string) {
 // Helper: URL include/exclude
 function isUrlAllowed(url: string, includePaths?: string[], excludePaths?: string[]): boolean {
   const pathName = new URL(url).pathname;
-
   if (excludePaths && excludePaths.some(prefix => pathName.startsWith(prefix))) return false;
-  if (includePaths && !includePaths.some(prefix => pathName.startsWith(prefix))) return false;
-
+  if (includePaths && includePaths.length > 0 && !includePaths.some(prefix => pathName.startsWith(prefix))) return false;
   return true;
 }
 

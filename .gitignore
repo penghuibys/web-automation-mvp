@@ -1,0 +1,14 @@
+# Node.js dependencies
+node_modules/
+
+# TypeScript build output
+dist/
+
+# Playwright screenshots
+screenshots/
+
+# Logs
+*.log
+
+# Optional system files
+.DS_Store
