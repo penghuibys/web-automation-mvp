@@ -4,7 +4,7 @@ const SERVER_URL = "http://localhost:8000";
 
 async function login() {
   const resp = await axios.post(`${SERVER_URL}/login`, {
-    loginUrl: "https://example.com/login",
+    loginUrl: SERVER_URL,
     username: "testuser",
     password: "password123",
     usernameSelector: "input[name=\"username\"]",

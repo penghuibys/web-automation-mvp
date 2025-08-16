@@ -41,7 +41,7 @@ app.post("/login", async (req, res) => {
   let browser: Browser | null = null;
 
   try {
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({ headless: false });
     const page = await browser.newPage();
     logs.push(`Navigating to ${loginUrl}`);
     await page.goto(loginUrl, { waitUntil: "networkidle" });
@@ -125,4 +125,5 @@ app.get("/status/:sessionId", (req, res) => {
   res.json({ logs, lastScreenshot: fs.existsSync(lastScreenshot) ? lastScreenshot : null });
 });
 
+app.use(express.static(__dirname));
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

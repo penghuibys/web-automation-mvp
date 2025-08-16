@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Automation MVP Test</title>
+</head>
+<body>
+  <h1>Login Test</h1>
+  <form id="loginForm">
+    <label>
+      Login URL: <input type="text" name="loginUrl" value="https://example.com/login" size="50"/>
+    </label><br/><br/>
+    <label>
+      Username: <input type="text" name="username" value="testuser"/>
+    </label><br/><br/>
+    <label>
+      Password: <input type="password" name="password" value="password123"/>
+    </label><br/><br/>
+    <label>
+      Username Selector: <input type="text" name="usernameSelector" value="input[name='username']"/>
+    </label><br/><br/>
+    <label>
+      Password Selector: <input type="text" name="passwordSelector" value="input[name='password']"/>
+    </label><br/><br/>
+    <label>
+      Submit Selector: <input type="text" name="submitSelector" value="button[type='submit']"/>
+    </label><br/><br/>
+    <button type="submit">Login</button>
+  </form>
+
+  <h2>Result</h2>
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        const resp = await fetch('http://localhost:8000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        result.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        result.textContent = err;
+      }
+    });
+  </script>
+
+
+
+
+<hr/>
+<h1>Fetch Page Test</h1>
+<form id="fetchForm">
+  <label>
+    Session ID: <input type="text" name="sessionId" size="36"/>
+  </label><br/><br/>
+  <label>
+    URL to fetch: <input type="text" name="url" value="https://example.com/course/lesson1" size="50"/>
+  </label><br/><br/>
+  <label>
+    Include Paths (comma separated): <input type="text" name="includePaths" value="/course"/>
+  </label><br/><br/>
+  <label>
+    Exclude Paths (comma separated): <input type="text" name="excludePaths" value="/admin"/>
+  </label><br/><br/>
+  <button type="submit">Fetch Page</button>
+</form>
+
+<h2>Fetch Result</h2>
+<pre id="fetchResult"></pre>
+
+<script>
+  const fetchForm = document.getElementById('fetchForm');
+  const fetchResult = document.getElementById('fetchResult');
+
+  fetchForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(fetchForm);
+    const payload = {
+      sessionId: formData.get('sessionId'),
+      url: formData.get('url'),
+      includePaths: formData.get('includePaths')?.toString().split(',').map(s => s.trim()),
+      excludePaths: formData.get('excludePaths')?.toString().split(',').map(s => s.trim())
+    };
+
+    try {
+      const resp = await fetch('http://localhost:8000/fetch_page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await resp.json();
+      fetchResult.textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      fetchResult.textContent = err;
+    }
+  });
+</script>
+
+</body>
+</html>
